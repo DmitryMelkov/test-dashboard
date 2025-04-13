@@ -17,42 +17,11 @@ body {
   font-family: "Bitter", sans-serif;
 }
 
-body::-webkit-scrollbar {
-  width: 3px;
-  height: 3px;
-  /* ширина scrollbar */
-}
 
-body::-webkit-scrollbar-track {
-  background-color: vars.$coconut-white;
-  /* цвет дорожки */
-}
 
-body::-webkit-scrollbar-thumb {
-  background-color: vars.$hulk;
-  /* цвет плашки */
-  border-radius: 20px;
-  /* закругления плашки */
-}
-
-.list-reset {
-  margin: 0;
-  padding: 0;
-  list-style-type: none;
-}
 
 .title-reset {
   margin: 0;
-}
-
-.btn-reset {
-  background-color: transparent;
-  cursor: pointer;
-  padding: 0px;
-  border-width: initial;
-  border-style: none;
-  border-color: initial;
-  border-image: initial;
 }
 
 .container {

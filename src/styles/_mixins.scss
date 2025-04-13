@@ -18,3 +18,26 @@
   bottom: $bottom;
   left: $left;
 }
+
+@mixin btn-reset {
+  background-color: transparent;
+  cursor: pointer;
+  padding: 0;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  text-align: inherit;
+  appearance: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+@mixin list-reset {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}

@@ -1,0 +1,47 @@
+.dashboard {
+  background-color: inherit;
+  color: inherit;
+  height: 100%;
+
+  &__breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+
+  &__breadcrumbs-link {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+    &:active {
+      text-decoration: underline;
+    }
+    &:focus-visible {
+      text-decoration: underline;
+    }
+  }
+
+  &__breadcrumbs-separator {
+    color: inherit;
+    opacity: 0.6;
+  }
+
+  &__breadcrumbs-current {
+    color: inherit;
+    font-weight: 500;
+  }
+
+  &__title {
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+  }
+
+  &__content {
+    line-height: 1.6;
+  }
+}

@@ -1,0 +1,25 @@
+@use "../../styles/mixins" as mixins;
+@use "../../styles/variables" as vars;
+
+.layout {
+  display: flex;
+  min-height: 100vh;
+  transition: all 0.3s ease;
+
+  &--light {
+    background-color: vars.$white-smoke;
+    color: vars.$carbon;
+  }
+
+  &--dark {
+    background-color: vars.$eerie-black;
+    color: vars.$snowflake;
+  }
+}
+
+.main {
+  flex-grow: 1;
+  padding: 2rem;
+  background-color: inherit;
+  color: inherit;
+}
