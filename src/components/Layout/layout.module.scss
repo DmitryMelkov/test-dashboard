@@ -1,9 +1,10 @@
-@use "../../styles/mixins" as mixins;
-@use "../../styles/variables" as vars;
+@use '../../styles/mixins' as mixins;
+@use '../../styles/variables' as vars;
 
 .layout {
   display: flex;
-  min-height: 100vh;
+  flex-direction: column;
+  min-height: 100vh; // Минимальная высота на весь экран
   transition: all 0.3s ease;
 
   &--light {
@@ -17,9 +18,16 @@
   }
 }
 
+.content {
+  display: flex;
+  flex: 1; // Занимает всё доступное пространство
+  min-height: 0; // Фиксит баг с переполнением в Flexbox
+}
+
 .main {
   flex-grow: 1;
-  padding: 2rem;
+  padding: 30px 20px;
+  overflow-y: auto; // Добавляем скролл только для контента, если нужно
   background-color: inherit;
   color: inherit;
 }

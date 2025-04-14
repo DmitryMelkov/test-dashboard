@@ -4,9 +4,10 @@
   padding: 1.5rem;
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 0.75rem;
   margin-top: auto;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
 
   &__switch {
     position: relative;

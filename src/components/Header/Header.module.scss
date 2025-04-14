@@ -1,0 +1,58 @@
+@use '../../styles/mixins' as mixins;
+@use '../../styles/variables' as vars;
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  height: 60px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+
+
+
+
+  &__logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+
+    &-text {
+      background: linear-gradient(90deg, #3f51b5, #2196f3);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+  }
+
+  &__logout {
+    display: flex;
+    background: none;
+    border: none;
+    cursor: pointer;
+    @include mixins.text-style(16px, 24px, 400, inherit);
+    transition: color .3s ease-in-out;
+
+    &:hover {
+      color: vars.$clear-chill;
+    }
+    &:active {
+      color: vars.$clear-chill;
+    }
+    &:focus-visible {
+      color: vars.$clear-chill;
+      outline: none;
+    }
+  }
+
+  &--light {
+    background-color: vars.$white;
+    color: vars.$carbon;
+  }
+
+  &--dark {
+    background-color: vars.$black-out;
+    color: vars.$snowflake;
+  }
+}

@@ -3,21 +3,11 @@
 
 .sidebar {
   width: 250px;
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
   /* Общие стили */
-  &__logo {
-    padding: 1.5rem;
-    font-size: 1.5rem;
-    font-weight: bold;
-    text-align: center;
-    margin-bottom: 1rem;
-    color: inherit;
-  }
-
   &__nav {
     padding: 0.5rem 0;
   }
@@ -70,7 +60,7 @@
   &__submenu {
     padding-left: 2rem;
     margin: 0.25rem 0;
-    @include mixins.list-reset
+    @include mixins.list-reset;
   }
 
   &__submenu-link {
@@ -101,7 +91,6 @@
 
   &__theme-toggle {
     margin-top: auto;
-    padding: 1rem;
     border-top: 1px solid rgba(vars.$black, 0.1);
   }
 
@@ -149,10 +138,6 @@
     background-color: vars.$white;
     color: vars.$carbon;
     box-shadow: 2px 0 8px rgba(vars.$black, 0.08);
-
-    .sidebar__logo {
-      color: vars.$clear-chill;
-    }
 
     .sidebar__item-btn:hover {
       background-color: rgba(vars.$clear-chill, 0.08);

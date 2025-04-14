@@ -14,8 +14,6 @@ const Sidebar = ({ theme }: SidebarProps) => {
   return (
     <aside className={`${styles['sidebar']} ${styles[`sidebar--${theme}`]}`}>
       {/* Добавляем класс `sidebar--dark` или `sidebar--light` */}
-      <div className={styles['sidebar__logo']}>Логотип</div>
-
       <nav className={styles['sidebar__nav']}>
         <ul className={`${styles['sidebar__list']}`}>
           <li className={`${styles['sidebar__item']}`}>
