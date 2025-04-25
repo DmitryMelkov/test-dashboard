@@ -73,9 +73,29 @@
       font-size: 0.95rem;
     }
 
+    .input-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 1rem;
+      color: vars.$clear-chill;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+      z-index: 1;
+
+      &.error-icon {
+        color: vars.$blood-burst;
+        animation: pulse 0.5s ease-in-out;
+      }
+    }
+
     input {
       width: 100%;
-      padding: 0.75rem 1rem;
+      padding: 0.75rem 1rem 0.75rem 2.5rem;
       font-size: 1rem;
       border: 1px solid rgba(vars.$black, 0.1);
       border-radius: 8px;
@@ -92,14 +112,22 @@
         outline: none;
         border-color: vars.$adamantine-blue;
         background-color: vars.$white;
+
+        & + .input-icon {
+          color: vars.$adamantine-blue;
+        }
       }
 
       &.error-input {
-        border-color: #ff4d4f;
-        background-color: rgba(#ff4d4f, 0.05);
+        border-color: vars.$blood-burst;
+        background-color: rgba(vars.$blood-burst, 0.05);
+
+        & + .input-icon {
+          color: vars.$blood-burst;
+        }
 
         &:focus {
-          box-shadow: 0 0 0 3px rgba(#ff4d4f, 0.1);
+          box-shadow: 0 0 0 3px rgba(vars.$blood-burst, 0.1);
         }
       }
     }
@@ -107,17 +135,17 @@
 
   &__error {
     margin-top: 5px;
-    color: #ff4d4f;
+    color: vars.$blood-burst;
     font-size: 0.875rem;
     padding: 0.75rem;
-    background-color: rgba(#ff4d4f, 0.05);
+    background-color: rgba(vars.$blood-burst, 0.05);
     border-radius: 6px;
-    border-left: 3px solid #ff4d4f;
+    border-left: 3px solid vars.$blood-burst;
     animation: shake 0.4s ease;
   }
 
   .field-error {
-    color: #ff4d4f;
+    color: vars.$blood-burst;
     font-size: 0.75rem;
     margin-top: 0.25rem;
     position: absolute;
@@ -192,4 +220,9 @@
 
 @keyframes spin {
   to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.1); opacity: 0.8; }
 }
