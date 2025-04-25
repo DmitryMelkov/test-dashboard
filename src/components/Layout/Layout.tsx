@@ -1,3 +1,4 @@
+// components/Layout/Layout.tsx
 import { useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
 import Sidebar from '../Sidebar/Sidebar';
@@ -8,15 +9,9 @@ import { RootState } from '../../store';
 const Layout = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
 
-  const handleLogout = () => {
-    // Здесь будет логика выхода
-    console.log('Logout clicked');
-    // Например: dispatch(logoutAction());
-  };
-
   return (
     <div className={`${styles['layout']} ${styles[`layout--${theme}`]}`}>
-      <Header theme={theme} onLogout={handleLogout} />
+      <Header theme={theme} />
       <div className={`${styles['content']}`}>
         <Sidebar theme={theme} />
         <main className={styles['main']}>

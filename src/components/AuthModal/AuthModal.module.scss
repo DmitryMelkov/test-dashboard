@@ -1,0 +1,195 @@
+// components/AuthModal/AuthModal.module.scss
+@use '../../styles/variables' as vars;
+@use '../../styles/mixins' as mixins;
+
+.auth-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(vars.$black, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease-out;
+
+  &__content {
+    background-color: vars.$white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 10px 25px rgba(vars.$black, 0.2);
+    border: 1px solid rgba(vars.$white, 0.1);
+    transform: translateY(-20px);
+    animation: slideUp 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+
+    @include mixins.respond-to('small') {
+      padding: 1.5rem;
+      max-width: 90%;
+    }
+  }
+
+  &__title {
+    margin-top: 0;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: vars.$eerie-black;
+    font-size: 1.5rem;
+    font-weight: 600;
+    position: relative;
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: -0.75rem;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 3px;
+      background: vars.$clear-chill;
+      border-radius: 3px;
+    }
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  &__form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: relative;
+
+    label {
+      font-weight: 500;
+      color: vars.$carbon;
+      font-size: 0.95rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 1rem;
+      border: 1px solid rgba(vars.$black, 0.1);
+      border-radius: 8px;
+      background-color: vars.$white-smoke;
+      transition: all 0.3s ease-in-out;
+
+      @media (min-width: 1024px) {
+        &:hover {
+          background-color: vars.$white;
+        }
+      }
+
+      &:focus {
+        outline: none;
+        border-color: vars.$adamantine-blue;
+        background-color: vars.$white;
+      }
+
+      &.error-input {
+        border-color: #ff4d4f;
+        background-color: rgba(#ff4d4f, 0.05);
+
+        &:focus {
+          box-shadow: 0 0 0 3px rgba(#ff4d4f, 0.1);
+        }
+      }
+    }
+  }
+
+  &__error {
+    margin-top: 5px;
+    color: #ff4d4f;
+    font-size: 0.875rem;
+    padding: 0.75rem;
+    background-color: rgba(#ff4d4f, 0.05);
+    border-radius: 6px;
+    border-left: 3px solid #ff4d4f;
+    animation: shake 0.4s ease;
+  }
+
+  .field-error {
+    color: #ff4d4f;
+    font-size: 0.75rem;
+    margin-top: 0.25rem;
+    position: absolute;
+    bottom: -1.25rem;
+    left: 0;
+    animation: fadeIn 0.2s ease-out;
+  }
+
+  &__submit {
+    padding: 0.85rem;
+    background-color: vars.$clear-chill;
+    color: vars.$white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-top: 0.5rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 0 rgba(vars.$black, 0.02);
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+
+    &:hover {
+      background-color: vars.$adamantine-blue;
+    }
+
+    &:disabled {
+      background-color: rgba(vars.$black, 0.08);
+      color: rgba(vars.$black, 0.25);
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &__loader {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid rgba(vars.$white, 0.3);
+    border-radius: 50%;
+    border-top-color: vars.$white;
+    animation: spin 1s ease-in-out infinite;
+  }
+}
+
+// Анимации
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-5px); }
+  40%, 80% { transform: translateX(5px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
