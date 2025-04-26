@@ -1,6 +1,6 @@
 // components/ProtectedRoute/ProtectedRoute.tsx
 import { useSelector } from 'react-redux';
-import { Navigate, Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
 import { RootState } from '../../store';
 import AuthModal from '../AuthModal/AuthModal';
 

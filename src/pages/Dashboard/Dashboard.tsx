@@ -4,12 +4,24 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './Dashboard.module.scss';
+import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
+
+interface ReportItem {
+  id: number;
+  date: string;
+  terminal_id: number;
+  idle_time: number;
+  motohours: number;
+  trip_time: number;
+  millage: number;
+  consumption_total: number;
+  drained: number;
+}
 
 const Dashboard = () => {
-  const [reportData, setReportData] = useState<any | null>(null);
+  const [reportData, setReportData] = useState<ReportItem[] | null>(null);
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
-  // Функция для выполнения GET-запроса к отчетам
   const fetchReport = async () => {
     if (!accessToken) return;
 
@@ -54,9 +66,8 @@ const Dashboard = () => {
       </div>
       <h1 className={styles['dashboard__title']}>Дашборд</h1>
       {reportData ? (
-        <div>
-          <h2>Данные отчета:</h2>
-          <pre>{JSON.stringify(reportData, null, 2)}</pre>
+        <div className={styles['dashboard__chart-container']}>
+          <VehicleTimeChart data={reportData} />
         </div>
       ) : (
         <p>Загрузка данных отчета...</p>
