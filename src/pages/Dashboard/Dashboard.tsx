@@ -4,53 +4,35 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './Dashboard.module.scss';
 import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
-import Button from '../../ui/Button/Button';
 
-interface ReportItem {
-  id: number;
-  date: string;
-  terminal_id: number;
-  idle_time: number;
-  motohours: number;
-  trip_time: number;
-  millage: number;
-  consumption_total: number;
-  drained: number;
+interface CarReport {
+  car_name: string;
+  wln_id: number;
+  car_data: {
+    id: number;
+    date: string;
+    wln_id: number;
+    motohours: number;
+    millage: number;
+    consumption_total: number;
+    drained: number;
+    filled_real: number;
+    filled_bill: number;
+    idle_time: number;
+  };
 }
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
-  const [reportData, setReportData] = useState<ReportItem[] | null>(null);
-  const [timeRange, setTimeRange] = useState<'10-days' | '20-days' | 'month'>('10-days');
+  const [reportData, setReportData] = useState<CarReport[] | null>(null);
+  const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const { accessToken } = useSelector((state: RootState) => state.auth);
 
-  const fetchReport = async (range: '10-days' | '20-days' | 'month') => {
+  const fetchReport = async () => {
     if (!accessToken) return;
 
     try {
       const url = new URL('http://localhost:8000/api/report');
-      let startDate: Date;
-
-      switch (range) {
-        case '10-days':
-          startDate = new Date();
-          startDate.setDate(startDate.getDate() - 10);
-          break;
-        case '20-days':
-          startDate = new Date();
-          startDate.setDate(startDate.getDate() - 20);
-          break;
-        case 'month':
-          startDate = new Date();
-          startDate.setMonth(startDate.getMonth() - 1);
-          break;
-      }
-
-      const endDate = new Date();
-
-      url.searchParams.append('start_from', startDate.toISOString().split('T')[0]);
-      url.searchParams.append('end_to', endDate.toISOString().split('T')[0]);
-
       const response = await fetch(url.toString(), {
         method: 'GET',
         headers: {
@@ -65,16 +47,35 @@ const Dashboard = () => {
 
       const data = await response.json();
       setReportData(data);
+
+      // Выбираем топ-5 машин с наибольшим временем простоя по умолчанию
+      const topIdleCars = [...data]
+        .sort((a, b) => b.car_data.idle_time - a.car_data.idle_time)
+        .slice(0, 5)
+        .map(car => car.car_name);
+      setSelectedCars(topIdleCars);
     } catch (error) {
       console.error('Произошла ошибка при запросе отчета:', error);
     }
   };
 
+  const handleCarToggle = (carName: string) => {
+    setSelectedCars(prev =>
+      prev.includes(carName)
+        ? prev.filter(name => name !== carName)
+        : [...prev, carName]
+    );
+  };
+
+  const filteredData = reportData
+    ? reportData.filter(car => selectedCars.includes(car.car_name))
+    : [];
+
   useEffect(() => {
     if (accessToken) {
-      fetchReport(timeRange);
+      fetchReport();
     }
-  }, [accessToken, timeRange]);
+  }, [accessToken]);
 
   return (
     <div className={`${styles.dashboard} ${styles[`dashboard--${theme}`]}`}>
@@ -87,22 +88,34 @@ const Dashboard = () => {
       </div>
       <h1 className={styles['dashboard__title']}>Дашборд</h1>
 
-      <div className={styles['dashboard__buttons']}>
-        <Button active={timeRange === '10-days'} onClick={() => setTimeRange('10-days')} theme={theme}>
-          Последние 10 дней
-        </Button>
-        <Button active={timeRange === '20-days'} onClick={() => setTimeRange('20-days')} theme={theme}>
-          Последние 20 дней
-        </Button>
-        <Button active={timeRange === 'month'} onClick={() => setTimeRange('month')} theme={theme}>
-          Месяц
-        </Button>
-      </div>
-
       {reportData ? (
-        <div className={styles['dashboard__chart-container']}>
-          <VehicleTimeChart data={reportData} />
-        </div>
+        <>
+          <div className={styles['dashboard__car-selector']}>
+            <h3>Выберите машины для отображения:</h3>
+            <div className={styles['car-checkboxes']}>
+              {reportData
+                .sort((a, b) => b.car_data.idle_time - a.car_data.idle_time)
+                .map(car => (
+                  <label key={car.car_name} className={styles['car-checkbox']}>
+                    <input
+                      type="checkbox"
+                      checked={selectedCars.includes(car.car_name)}
+                      onChange={() => handleCarToggle(car.car_name)}
+                    />
+                    {car.car_name} (простой: {car.car_data.idle_time}ч)
+                  </label>
+                ))}
+            </div>
+          </div>
+
+          {selectedCars.length > 0 ? (
+            <div className={styles['dashboard__chart-container']}>
+              <VehicleTimeChart data={filteredData} />
+            </div>
+          ) : (
+            <p>Выберите хотя бы одну машину для отображения</p>
+          )}
+        </>
       ) : (
         <p>Загрузка данных отчета...</p>
       )}

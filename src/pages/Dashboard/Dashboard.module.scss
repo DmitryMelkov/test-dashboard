@@ -1,4 +1,4 @@
-@use '../../styles/mixins' as mixins;
+@use 'sass:color';
 @use '../../styles/variables' as vars;
 
 .dashboard {
@@ -52,18 +52,45 @@
     color: inherit;
   }
 
-  &__buttons {
-    display: flex;
-    gap: 0.75rem;
-    margin-bottom: 2rem;
-    flex-wrap: wrap;
-  }
-
   &__chart-container {
     margin-top: 2rem;
     padding: 1.5rem;
     border-radius: 8px;
     transition: all 0.3s ease-in-out;
+  }
+
+  &__car-selector {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: rgba(vars.$white, 0.05);
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .car-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .car-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(vars.$clear-chill, 0.1);
+    }
+
+    input {
+      cursor: pointer;
+    }
   }
 
   /* Стили для светлой темы (по умолчанию) */
@@ -73,7 +100,7 @@
 
     .dashboard__breadcrumbs-link {
       &:hover {
-        color: darken(vars.$clear-chill, 10%);
+        color: color.adjust(vars.$clear-chill, $lightness: -10%);
       }
     }
 
@@ -90,7 +117,7 @@
 
     .dashboard__breadcrumbs-link {
       &:hover {
-        color: lighten(vars.$clear-chill, 10%);
+        color: color.scale(vars.$clear-chill, $lightness: 10%);
       }
     }
 
@@ -98,5 +125,16 @@
       background-color: rgba(vars.$white, 0.05);
       box-shadow: 0 2px 8px rgba(vars.$black, 0.3);
     }
+
+    .dashboard__car-selector {
+      background-color: rgba(vars.$white, 0.05);
+    }
+
+    .car-checkbox {
+      &:hover {
+        background-color: rgba(vars.$clear-chill, 0.2);
+      }
+    }
+
   }
 }
