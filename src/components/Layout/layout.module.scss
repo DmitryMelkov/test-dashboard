@@ -20,14 +20,14 @@
 
 .content {
   display: flex;
-  flex: 1; // Занимает всё доступное пространство
-  min-height: 0; // Фиксит баг с переполнением в Flexbox
+  flex: 1;
+  min-height: 0; 
 }
 
 .main {
   flex-grow: 1;
-  padding: 30px 20px;
-  overflow-y: auto; // Добавляем скролл только для контента, если нужно
+  padding: 20px;
+  overflow-y: auto;
   background-color: inherit;
   color: inherit;
 }

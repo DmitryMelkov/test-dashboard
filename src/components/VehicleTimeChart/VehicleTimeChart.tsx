@@ -1,4 +1,3 @@
-// components/VehicleTimeChart/VehicleTimeChart.tsx
 import React from 'react';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
@@ -24,17 +23,17 @@ const VehicleTimeChart: React.FC<VehicleTimeChartProps> = ({ data }) => {
       {
         label: 'Время простоя (ч)',
         data: data.map(item => item.idle_time),
-        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+        backgroundColor: '#FF5733',
       },
       {
         label: 'Моточасы (ч)',
         data: data.map(item => item.motohours),
-        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+        backgroundColor: '#36A2EB',
       },
       {
         label: 'Время поездки (ч)',
         data: data.map(item => item.trip_time),
-        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+        backgroundColor: '#FFCD56',
       },
     ],
   };

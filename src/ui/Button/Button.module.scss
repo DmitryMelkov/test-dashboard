@@ -1,0 +1,68 @@
+// components/Button/Button.module.scss
+@use '../../styles/mixins' as mixins;
+@use '../../styles/variables' as vars;
+
+.button {
+  @include mixins.btn-reset;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-align: center;
+
+  /* Варианты кнопок */
+  &--primary {
+    background-color: rgba(vars.$clear-chill, 0.1);
+    color: inherit;
+  }
+
+  &--secondary {
+    background-color: transparent;
+    border: 1px solid rgba(vars.$clear-chill, 0.3);
+  }
+
+  /* Активное состояние */
+  &--active {
+    background-color: vars.$clear-chill !important;
+    color: vars.$white !important;
+
+    &:hover {
+      background-color: darken(vars.$clear-chill, 10%) !important;
+    }
+  }
+
+  /* Светлая тема */
+  &--light {
+    &.button--primary {
+      &:hover:not(.button--active) {
+        background-color: rgba(vars.$clear-chill, 0.2);
+      }
+    }
+
+    &.button--secondary {
+      &:hover:not(.button--active) {
+        border-color: vars.$clear-chill;
+      }
+    }
+  }
+
+  /* Темная тема */
+  &--dark {
+    &.button--primary {
+      background-color: rgba(vars.$white, 0.1);
+
+      &:hover:not(.button--active) {
+        background-color: rgba(vars.$white, 0.2);
+      }
+    }
+
+    &.button--secondary {
+      border-color: rgba(vars.$white, 0.3);
+
+      &:hover:not(.button--active) {
+        border-color: vars.$white;
+      }
+    }
+  }
+}
