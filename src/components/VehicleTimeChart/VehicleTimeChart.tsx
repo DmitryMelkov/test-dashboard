@@ -23,9 +23,9 @@ const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
     item => item.car_data.idle_time > 0 || item.car_data.motohours > 0
   );
 
-  // Сортируем по убыванию моточасов
+  // Сортируем по убыванию общего времени (моточасы + простой)
   const sortedData = [...filteredData].sort(
-    (a, b) => b.car_data.motohours - a.car_data.motohours
+    (a, b) => (b.car_data.motohours + b.car_data.idle_time) - (a.car_data.motohours + a.car_data.idle_time)
   );
 
   // Цвета для разных тем
@@ -37,14 +37,14 @@ const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
     labels: sortedData.map(item => item.car_name),
     datasets: [
       {
-        label: 'Время простоя (ч)',
-        data: sortedData.map(item => item.car_data.idle_time),
-        backgroundColor: '#FF5733',
-      },
-      {
         label: 'Моточасы (ч)',
         data: sortedData.map(item => item.car_data.motohours),
         backgroundColor: '#36A2EB',
+      },
+      {
+        label: 'Время простоя (ч)',
+        data: sortedData.map(item => item.car_data.idle_time),
+        backgroundColor: '#FF5733',
       },
     ],
   };
@@ -60,7 +60,7 @@ const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
       },
       title: {
         display: true,
-        text: 'Распределение моточасов и времени простоя по машинам',
+        text: 'Моточасы и время простоя по машинам',
         color: textColor,
         font: {
           size: 16,
@@ -72,10 +72,20 @@ const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
         bodyColor: textColor,
         borderColor: gridColor,
         borderWidth: 1,
+        callbacks: {
+          afterBody: (context: any) => {
+            const dataIndex = context[0].dataIndex;
+            const motohours = sortedData[dataIndex].car_data.motohours;
+            const idleTime = sortedData[dataIndex].car_data.idle_time;
+            const total = motohours + idleTime;
+            return `Всего: ${total.toFixed(1)} ч`;
+          },
+        },
       },
     },
     scales: {
       x: {
+        stacked: true,
         grid: {
           color: gridColor,
         },
@@ -84,6 +94,7 @@ const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
         },
       },
       y: {
+        stacked: true,
         min: 0,
         max: 24,
         grid: {
