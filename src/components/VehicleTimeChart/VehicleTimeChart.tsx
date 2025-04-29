@@ -3,19 +3,11 @@ import { useSelector } from 'react-redux';
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { RootState } from '../../store';
+import { CarReport } from '../../types/CarReport';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
-interface CarData {
-  car_name: string;
-  wln_id: number;
-  car_data: {
-    idle_time: number;
-    motohours: number;
-  };
-}
-
-const VehicleTimeChart: React.FC<{ data: CarData[] }> = ({ data }) => {
+const VehicleTimeChart: React.FC<{ data: CarReport[] }> = ({ data }) => {
   const theme = useSelector((state: RootState) => state.theme.mode);
 
   // Фильтруем данные, чтобы показать только машины с ненулевыми значениями

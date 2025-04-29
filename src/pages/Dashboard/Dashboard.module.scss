@@ -7,44 +7,6 @@
   color: inherit;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 
-  &__breadcrumbs {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    font-size: 0.9rem;
-  }
-
-  &__breadcrumbs-link {
-    color: inherit;
-    text-decoration: none;
-    transition: color 0.2s ease;
-
-    &:hover {
-      color: vars.$clear-chill;
-      text-decoration: underline;
-    }
-    &:active {
-      color: vars.$clear-chill;
-    }
-    &:focus-visible {
-      outline: none;
-      color: vars.$clear-chill;
-      text-decoration: underline;
-    }
-  }
-
-  &__breadcrumbs-separator {
-    color: inherit;
-    opacity: 0.6;
-  }
-
-  &__breadcrumbs-current {
-    color: inherit;
-    font-weight: 500;
-    opacity: 0.8;
-  }
-
   &__title {
     margin: 0 0 1.5rem 0;
     font-size: 1.8rem;
@@ -53,16 +15,11 @@
   }
 
   &__chart-container {
-    margin-top: 2rem;
+    margin-top: 1rem;
     padding: 1.5rem;
     border-radius: 8px;
     transition: all 0.3s ease-in-out;
     max-width: 800px;
-    margin: 2rem auto 0;
-  }
-
-  &__select-button {
-    margin-bottom: 2rem;
   }
 
   /* Стили для светлой темы (по умолчанию) */
@@ -70,15 +27,9 @@
     background-color: vars.$white;
     color: vars.$carbon;
 
-    .dashboard__breadcrumbs-link {
-      &:hover {
-        color: color.adjust(vars.$clear-chill, $lightness: -10%);
-      }
-    }
-
     .dashboard__chart-container {
       background-color: vars.$white;
-      box-shadow: 0 2px 8px rgba(vars.$black, 0.08);
+      box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
     }
   }
 
@@ -86,12 +37,6 @@
   &--dark {
     background-color: vars.$black-out;
     color: vars.$snowflake;
-
-    .dashboard__breadcrumbs-link {
-      &:hover {
-        color: color.scale(vars.$clear-chill, $lightness: 10%);
-      }
-    }
 
     .dashboard__chart-container {
       background-color: rgba(vars.$white, 0.05);

@@ -1,68 +1,33 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useMemo, useEffect } from 'react';
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs'; // Импортируем компонент
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './Dashboard.module.scss';
 import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
 import Button from '../../ui/Button/Button';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
-
-interface CarReport {
-  car_name: string;
-  wln_id: number;
-  car_data: {
-    id: number;
-    date: string;
-    wln_id: number;
-    motohours: number;
-    millage: number;
-    consumption_total: number;
-    drained: number;
-    filled_real: number;
-    filled_bill: number;
-    idle_time: number;
-  };
-}
+import { useReportData } from '../../hooks/useReportData';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
-  const [reportData, setReportData] = useState<CarReport[] | null>(null);
   const [selectedCars, setSelectedCars] = useState<string[]>([]);
   const [tempSelectedCars, setTempSelectedCars] = useState<string[]>([]);
   const [openModal, setOpenModal] = useState(false);
-  const { accessToken } = useSelector((state: RootState) => state.auth);
+  const { reportData, sortedReportData } = useReportData();
 
-  const fetchReport = async () => {
-    if (!accessToken) return;
+  // Фильтруем данные по выбранным машинам
+  const filteredData = useMemo(() => {
+    if (!reportData) return [];
+    return reportData.filter((car) => selectedCars.includes(car.car_name));
+  }, [reportData, selectedCars]);
 
-    try {
-      const url = new URL('http://localhost:8000/api/report');
-      const response = await fetch(url.toString(), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-      });
-
-      if (!response.ok) {
-        throw new Error(`Ошибка HTTP: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setReportData(data);
-
-      // Выбираем топ-5 машин с наибольшим временем простоя по умолчанию
-      const topIdleCars = [...data]
-        .sort((a, b) => b.car_data.idle_time - a.car_data.idle_time)
-        .slice(0, 5)
-        .map((car) => car.car_name);
+  useEffect(() => {
+    if (sortedReportData) {
+      const topIdleCars = sortedReportData.slice(0, 5).map((car) => car.car_name);
       setSelectedCars(topIdleCars);
       setTempSelectedCars(topIdleCars);
-    } catch (error) {
-      console.error('Произошла ошибка при запросе отчета:', error);
     }
-  };
+  }, [sortedReportData]);
 
   const handleOpenModal = () => {
     setTempSelectedCars(selectedCars);
@@ -94,23 +59,9 @@ const Dashboard = () => {
     }
   };
 
-  const filteredData = reportData ? reportData.filter((car) => selectedCars.includes(car.car_name)) : [];
-
-  useEffect(() => {
-    if (accessToken) {
-      fetchReport();
-    }
-  }, [accessToken]);
-
   return (
     <div className={`${styles.dashboard} ${styles[`dashboard--${theme}`]}`}>
-      <div className={styles['dashboard__breadcrumbs']}>
-        <Link to="/" className={styles['dashboard__breadcrumbs-link']}>
-          КПД
-        </Link>
-        <span className={styles['dashboard__breadcrumbs-separator']}>/</span>
-        <span className={styles['dashboard__breadcrumbs-current']}>Дашборд</span>
-      </div>
+      <Breadcrumbs segments={[{ label: 'КПД' }, { label: 'Дашборд' }]} theme={theme} />
       <h1 className={styles['dashboard__title']}>Дашборд</h1>
 
       {reportData ? (
@@ -123,7 +74,7 @@ const Dashboard = () => {
             open={openModal}
             onClose={handleCloseModal}
             onApply={handleApplySelection}
-            reportData={reportData}
+            reportData={sortedReportData}
             selectedCars={tempSelectedCars}
             onToggleCar={handleCarToggle}
             onSelectAll={handleSelectAll}
