@@ -7,6 +7,7 @@ import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart
 import Button from '../../ui/Button/Button';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
 import { useReportData } from '../../hooks/useReportData';
+import Loader from '../../ui/loader/Loader';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -89,7 +90,7 @@ const Dashboard = () => {
           )}
         </>
       ) : (
-        <p>Загрузка данных отчета...</p>
+        <Loader />
       )}
     </div>
   );

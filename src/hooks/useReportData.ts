@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { CarReport } from '../types/CarReport';
 
-
 export const useReportData = () => {
   const [reportData, setReportData] = useState<CarReport[] | null>(null);
   const { accessToken } = useSelector((state: RootState) => state.auth);
@@ -19,6 +18,9 @@ export const useReportData = () => {
     if (!accessToken) return;
 
     try {
+      // Имитация задержки загрузки (2 секунды)
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
       const url = new URL('http://localhost:8000/api/report');
       const response = await fetch(url.toString(), {
         method: 'GET',
@@ -44,6 +46,8 @@ export const useReportData = () => {
       fetchReport();
     }
   }, [accessToken]);
+
+  
 
   return { reportData, sortedReportData, fetchReport };
 };
