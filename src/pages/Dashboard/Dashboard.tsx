@@ -9,6 +9,8 @@ import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionMo
 import { useReportData } from '../../hooks/useReportData';
 import Loader from '../../ui/loader/Loader';
 import ReportTable from '../../components/ReportTable/ReportTable';
+import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
+import VehicleUsageDoughnut from '../../components/VehicleUsageDoughnut/VehicleUsageDoughnut';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -69,9 +71,6 @@ const Dashboard = () => {
         <>
           <div className={styles['dashboard__header']}>
             <h2 className={styles['dashboard__title']}>Графики</h2>
-            <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
-              Выбрать машины ({selectedCars.length})
-            </Button>
           </div>
 
           <CarSelectionModal
@@ -84,13 +83,26 @@ const Dashboard = () => {
             onSelectAll={handleSelectAll}
           />
 
-          {selectedCars.length > 0 ? (
-            <div className={styles['dashboard__chart-container']}>
-              <VehicleTimeChart data={filteredChartData} />
+          <div className={styles['dashboard__charts-container']}>
+            {selectedCars.length > 0 ? (
+              <div className={styles['dashboard__chart']}>
+                <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
+                  Выбрать машины ({selectedCars.length})
+                </Button>
+                <VehicleTimeChart data={filteredChartData} />
+              </div>
+            ) : (
+              <p>Выберите хотя бы одну машину для отображения на графике</p>
+            )}
+
+            <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--douhnut']}`}>
+              <VehicleUsageDoughnut data={reportData} />
             </div>
-          ) : (
-            <p>Выберите хотя бы одну машину для отображения на графике</p>
-          )}
+
+            <div className={styles['dashboard__chart']}>
+              <VehicleActivityChart data={reportData} />
+            </div>
+          </div>
 
           <h2 className={styles['dashboard__subtitle']}>Полный отчет по всем машинам</h2>
           <div className={styles['dashboard__table-container']}>

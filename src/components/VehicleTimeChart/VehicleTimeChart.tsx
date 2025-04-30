@@ -52,7 +52,7 @@ const VehicleTimeChart: React.FC<{ data: CarReport[] }> = ({ data }) => {
       },
       title: {
         display: true,
-        text: 'Моточасы и время простоя по машинам',
+        text: '',
         color: textColor,
         font: {
           size: 16,
