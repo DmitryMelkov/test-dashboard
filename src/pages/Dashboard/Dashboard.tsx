@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from 'react';
-import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs'; // Импортируем компонент
+import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './Dashboard.module.scss';
@@ -8,6 +8,7 @@ import Button from '../../ui/Button/Button';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
 import { useReportData } from '../../hooks/useReportData';
 import Loader from '../../ui/loader/Loader';
+import ReportTable from '../../components/ReportTable/ReportTable';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -16,8 +17,8 @@ const Dashboard = () => {
   const [openModal, setOpenModal] = useState(false);
   const { reportData, sortedReportData } = useReportData();
 
-  // Фильтруем данные по выбранным машинам
-  const filteredData = useMemo(() => {
+  // Фильтруем данные по выбранным машинам (только для графика)
+  const filteredChartData = useMemo(() => {
     if (!reportData) return [];
     return reportData.filter((car) => selectedCars.includes(car.car_name));
   }, [reportData, selectedCars]);
@@ -63,13 +64,15 @@ const Dashboard = () => {
   return (
     <div className={`${styles.dashboard} ${styles[`dashboard--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'КПД' }, { label: 'Дашборд' }]} theme={theme} />
-      <h1 className={styles['dashboard__title']}>Дашборд</h1>
 
       {reportData ? (
         <>
-          <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
-            Выбрать машины для отображения ({selectedCars.length})
-          </Button>
+          <div className={styles['dashboard__header']}>
+            <h2 className={styles['dashboard__title']}>Графики</h2>
+            <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
+              Выбрать машины ({selectedCars.length})
+            </Button>
+          </div>
 
           <CarSelectionModal
             open={openModal}
@@ -83,11 +86,16 @@ const Dashboard = () => {
 
           {selectedCars.length > 0 ? (
             <div className={styles['dashboard__chart-container']}>
-              <VehicleTimeChart data={filteredData} />
+              <VehicleTimeChart data={filteredChartData} />
             </div>
           ) : (
-            <p>Выберите хотя бы одну машину для отображения</p>
+            <p>Выберите хотя бы одну машину для отображения на графике</p>
           )}
+
+          <h2 className={styles['dashboard__subtitle']}>Полный отчет по всем машинам</h2>
+          <div className={styles['dashboard__table-container']}>
+            <ReportTable data={reportData} />
+          </div>
         </>
       ) : (
         <Loader />

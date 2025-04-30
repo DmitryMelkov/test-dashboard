@@ -2,24 +2,53 @@
 @use '../../styles/variables' as vars;
 
 .dashboard {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 6rem);
   padding: 2rem;
   background-color: inherit;
   color: inherit;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  overflow: hidden; 
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-shrink: 0;
+  }
 
   &__title {
-    margin: 0 0 1.5rem 0;
-    font-size: 1.8rem;
-    font-weight: 600;
-    color: inherit;
+    margin: 0;
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  &__select-button {
+    margin-left: 15px;
   }
 
   &__chart-container {
-    margin-top: 1rem;
-    padding: 1.5rem;
-    border-radius: 8px;
-    transition: all 0.3s ease-in-out;
-    max-width: 800px;
+    height: 300px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  &__subtitle {
+    margin: 0 0 10px;
+    font-size: 18px;
+    font-weight: 500;
+    flex-shrink: 0;
+  }
+
+  &__table-container {
+    flex-grow: 1;
+    min-height: 200px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
   }
 
   /* Стили для светлой темы (по умолчанию) */
@@ -29,7 +58,7 @@
 
     .dashboard__chart-container {
       background-color: vars.$white;
-      box-shadow: 0 .15rem 1.75rem 0 rgba(58, 59, 69, .15);
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
     }
   }
 
