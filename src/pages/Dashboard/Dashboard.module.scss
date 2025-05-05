@@ -27,7 +27,7 @@
 
   &__charts-container {
     display: grid;
-    grid-template-columns: repeat(11, 1fr);
+    grid-template-columns: repeat(12, 1fr);
     gap: 20px;
     margin-bottom: 40px;
   }
@@ -36,12 +36,7 @@
     height: 350px; // Увеличим высоту для лучшего отображения
     flex-shrink: 0;
     position: relative;
-    grid-column: span 4;
-    p {
-      margin: 0;
-      padding: 20px;
-      text-align: center;
-    }
+    grid-column: span 6;
 
     &--light {
       background-color: vars.$white;
@@ -54,24 +49,11 @@
     }
   }
 
-  &__chart--douhnut {
-    grid-column: span 3;
-  }
-
   &__subtitle {
     margin: 0 0 10px;
     font-size: 18px;
     font-weight: 500;
     flex-shrink: 0;
-  }
-
-  &__table-container {
-    flex-grow: 1;
-    min-height: 200px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
   }
 
   /* Стили для светлой темы (по умолчанию) */
