@@ -5,11 +5,62 @@ import styles from './Dashboard.module.scss';
 import VehicleUsageDoughnut from '../../components/VehicleUsageDoughnut/VehicleUsageDoughnut';
 import Loader from '../../ui/loader/Loader';
 import { useReportData } from '../../hooks/useReportData';
+import Button from '../../ui/Button/Button';
+import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
+import { useEffect, useMemo, useState } from 'react';
+import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
+import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
-   const { reportData, sortedReportData } = useReportData();
+  const [selectedCars, setSelectedCars] = useState<string[]>([]);
+  const [tempSelectedCars, setTempSelectedCars] = useState<string[]>([]);
+  const [openModal, setOpenModal] = useState(false);
+  const { reportData, sortedReportData } = useReportData();
 
+  // Фильтруем данные по выбранным машинам (только для графика)
+  const filteredChartData = useMemo(() => {
+    if (!reportData) return [];
+    return reportData.filter((car) => selectedCars.includes(car.car_name));
+  }, [reportData, selectedCars]);
+
+  useEffect(() => {
+    if (sortedReportData) {
+      const topIdleCars = sortedReportData.slice(0, 5).map((car) => car.car_name);
+      setSelectedCars(topIdleCars);
+      setTempSelectedCars(topIdleCars);
+    }
+  }, [sortedReportData]);
+
+  const handleOpenModal = () => {
+    setTempSelectedCars(selectedCars);
+    setOpenModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  const handleApplySelection = () => {
+    setSelectedCars(tempSelectedCars);
+    setOpenModal(false);
+  };
+
+  const handleCarToggle = (carName: string) => {
+    setTempSelectedCars((prev) =>
+      prev.includes(carName) ? prev.filter((name) => name !== carName) : [...prev, carName]
+    );
+  };
+
+  const handleSelectAll = () => {
+    if (reportData) {
+      if (tempSelectedCars.length === reportData.length) {
+        setTempSelectedCars([]);
+      } else {
+        setTempSelectedCars(reportData.map((car) => car.car_name));
+      }
+    }
+  };
 
   return (
     <div className={`${styles['dashboard']} ${styles[`dashboard--${theme}`]}`}>
@@ -21,12 +72,37 @@ const Dashboard = () => {
             <h2 className={styles['dashboard__title']}>Графики</h2>
           </div>
 
-          <div className={styles['dashboard__charts-container']}>
 
-            <div className={`${styles['efficiency__chart']} ${styles['dashboard__chart--douhnut']}`}>
+          <CarSelectionModal
+            open={openModal}
+            onClose={handleCloseModal}
+            onApply={handleApplySelection}
+            reportData={sortedReportData}
+            selectedCars={tempSelectedCars}
+            onToggleCar={handleCarToggle}
+            onSelectAll={handleSelectAll}
+          />
+
+          <div className={styles['dashboard__charts-container']}>
+            {selectedCars.length > 0 ? (
+              <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--time']}`}>
+                <div className={`${styles['dashboard__select-button-container']}`}>
+                  <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
+                    Выбрать машины ({selectedCars.length})
+                  </Button>
+                </div>
+
+                <VehicleTimeChart data={filteredChartData} />
+              </div>
+            ) : (
+              <p>Выберите хотя бы одну машину для отображения на графике</p>
+            )}
+            <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--douhnut']}`}>
               <VehicleUsageDoughnut data={reportData} />
             </div>
-
+            <div className={styles['dashboard__chart']}>
+              <VehicleActivityChart data={reportData} />
+            </div>
           </div>
         </>
       ) : (

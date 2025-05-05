@@ -39,7 +39,7 @@
   &__chart {
     display: flex;
     flex-direction: column;
-    height: 350px; // Увеличим высоту для лучшего отображения
+    justify-content: flex-end;
     flex-shrink: 0;
     position: relative;
     grid-column: span 6;

@@ -33,7 +33,9 @@
   }
 
   &__chart {
-    height: 350px; // Увеличим высоту для лучшего отображения
+    display: flex;
+    flex-direction: column;
+    height: 350px;
     flex-shrink: 0;
     position: relative;
     grid-column: span 6;
@@ -47,6 +49,19 @@
       background-color: rgba(vars.$white, 0.05);
       box-shadow: 0 2px 8px rgba(vars.$black, 0.3);
     }
+  }
+
+  &__chart--douhnut {
+    grid-column: span 4;
+  }
+
+  &__chart--time {
+    grid-column: span 8;
+
+  }
+
+  &__select-button-container {
+    display: flex;
   }
 
   &__subtitle {
