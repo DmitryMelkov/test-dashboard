@@ -2,7 +2,7 @@ import { FC } from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Checkbox, FormControlLabel, Box, IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import Button from '../../ui/Button/Button';
-import styles from './CarSelectionModal.module.scss'; // Добавим файл стилей
+import styles from './CarSelectionModal.module.scss';
 import { RootState } from '../../store';
 import { useSelector } from 'react-redux';
 
@@ -14,6 +14,9 @@ interface CarSelectionModalProps {
   selectedCars: string[];
   onToggleCar: (carName: string) => void;
   onSelectAll: () => void;
+  sortKey: string; // 'idle_time' или 'millage'
+  unit: string; // 'ч' или 'км'
+  title: string;
 }
 
 const CarSelectionModal: FC<CarSelectionModalProps> = ({
@@ -24,8 +27,16 @@ const CarSelectionModal: FC<CarSelectionModalProps> = ({
   selectedCars,
   onToggleCar,
   onSelectAll,
+  sortKey,
+  unit,
+  title,
 }) => {
   const theme = useSelector((state: RootState) => state.theme.mode);
+
+  // Функция для получения значения параметра
+  const getCarValue = (car: any) => {
+    return car.car_data[sortKey] || 0;
+  };
 
   return (
     <Dialog
@@ -39,7 +50,7 @@ const CarSelectionModal: FC<CarSelectionModalProps> = ({
       }}
     >
       <DialogTitle className={`${styles['modal-title']} ${styles[`modal-title--${theme}`]}`}>
-        Выберите машины для отображения
+        {title}
         <IconButton
           aria-label="close"
           onClick={onClose}
@@ -75,7 +86,7 @@ const CarSelectionModal: FC<CarSelectionModalProps> = ({
           className={`${styles['modal-cars-container']} ${styles[`modal-cars-container--${theme}`]}`}
         >
           {reportData
-            .sort((a, b) => b.car_data.idle_time - a.car_data.idle_time)
+            .sort((a, b) => getCarValue(b) - getCarValue(a)) // Сортировка по убыванию
             .map((car) => (
               <FormControlLabel
                 key={car.car_name}
@@ -86,7 +97,7 @@ const CarSelectionModal: FC<CarSelectionModalProps> = ({
                     className={`${styles['modal-checkbox']} ${styles[`modal-checkbox--${theme}`]}`}
                   />
                 }
-                label={`${car.car_name} (${car.car_data.idle_time}ч)`}
+                label={`${car.car_name} (${getCarValue(car)}${unit})`}
                 className={`${styles['modal-label']} ${styles[`modal-label--${theme}`]}`}
               />
             ))}

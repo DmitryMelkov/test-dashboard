@@ -80,6 +80,9 @@ const Efficiency = () => {
             selectedCars={tempSelectedCars}
             onToggleCar={handleCarToggle}
             onSelectAll={handleSelectAll}
+            sortKey="idle_time"
+            unit="ч"
+            title="Выбор машин для графика времени"
           />
 
           <div className={styles['efficiency__charts-container']}>

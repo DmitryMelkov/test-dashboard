@@ -10,40 +10,51 @@ import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart
 import { useEffect, useMemo, useState } from 'react';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
 import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
+import VehicleMileageChart from '../../components/VehicleMileageChart/VehicleMileageChart';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
-  const [selectedCars, setSelectedCars] = useState<string[]>([]);
+  const [selectedTimeCars, setSelectedTimeCars] = useState<string[]>([]);
+  const [selectedMileageCars, setSelectedMileageCars] = useState<string[]>([]);
   const [tempSelectedCars, setTempSelectedCars] = useState<string[]>([]);
-  const [openModal, setOpenModal] = useState(false);
+  const [openTimeModal, setOpenTimeModal] = useState(false);
+  const [openMileageModal, setOpenMileageModal] = useState(false);
   const { reportData, sortedReportData } = useReportData();
 
-  // Фильтруем данные по выбранным машинам (только для графика)
-  const filteredChartData = useMemo(() => {
+  // Фильтруем данные для каждого графика
+  const filteredTimeData = useMemo(() => {
     if (!reportData) return [];
-    return reportData.filter((car) => selectedCars.includes(car.car_name));
-  }, [reportData, selectedCars]);
+    return reportData.filter((car) => selectedTimeCars.includes(car.car_name));
+  }, [reportData, selectedTimeCars]);
+
+  const filteredMileageData = useMemo(() => {
+    if (!reportData) return [];
+    return reportData.filter((car) => selectedMileageCars.includes(car.car_name));
+  }, [reportData, selectedMileageCars]);
 
   useEffect(() => {
     if (sortedReportData) {
-      const topIdleCars = sortedReportData.slice(0, 5).map((car) => car.car_name);
-      setSelectedCars(topIdleCars);
-      setTempSelectedCars(topIdleCars);
+      // Для графика времени - топ 5 по времени простоя
+      const topIdleCars = sortedReportData
+        .sort((a, b) => b.car_data.idle_time - a.car_data.idle_time)
+        .slice(0, 5)
+        .map((car) => car.car_name);
+
+      // Для графика пробега - топ 5 по пробегу
+      const topMileageCars = sortedReportData
+        .sort((a, b) => b.car_data.millage - a.car_data.millage)
+        .slice(0, 5)
+        .map((car) => car.car_name);
+
+      setSelectedTimeCars(topIdleCars);
+      setSelectedMileageCars(topMileageCars);
     }
   }, [sortedReportData]);
 
-  const handleOpenModal = () => {
-    setTempSelectedCars(selectedCars);
-    setOpenModal(true);
-  };
-
+  // Общие функции для работы с модалкой
   const handleCloseModal = () => {
-    setOpenModal(false);
-  };
-
-  const handleApplySelection = () => {
-    setSelectedCars(tempSelectedCars);
-    setOpenModal(false);
+    setOpenTimeModal(false);
+    setOpenMileageModal(false);
   };
 
   const handleCarToggle = (carName: string) => {
@@ -62,6 +73,17 @@ const Dashboard = () => {
     }
   };
 
+  // Функции применения выбора для каждого графика
+  const handleApplyTimeSelection = () => {
+    setSelectedTimeCars(tempSelectedCars);
+    setOpenTimeModal(false);
+  };
+
+  const handleApplyMileageSelection = () => {
+    setSelectedMileageCars(tempSelectedCars);
+    setOpenMileageModal(false);
+  };
+
   return (
     <div className={`${styles['dashboard']} ${styles[`dashboard--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'КПД' }, { label: 'Дашборд' }]} theme={theme} />
@@ -72,35 +94,85 @@ const Dashboard = () => {
             <h2 className={styles['dashboard__title']}>Графики</h2>
           </div>
 
-
+          {/* Модалка для выбора машин графика времени */}
           <CarSelectionModal
-            open={openModal}
+            open={openTimeModal}
             onClose={handleCloseModal}
-            onApply={handleApplySelection}
+            onApply={handleApplyTimeSelection}
             reportData={sortedReportData}
             selectedCars={tempSelectedCars}
             onToggleCar={handleCarToggle}
             onSelectAll={handleSelectAll}
+            sortKey="idle_time"
+            unit="ч"
+            title="Выбор машин для графика времени"
+          />
+
+          {/* Модалка для выбора машин графика пробега */}
+          <CarSelectionModal
+            open={openMileageModal}
+            onClose={handleCloseModal}
+            onApply={handleApplyMileageSelection}
+            reportData={sortedReportData}
+            selectedCars={tempSelectedCars}
+            onToggleCar={handleCarToggle}
+            onSelectAll={handleSelectAll}
+            sortKey="millage"
+            unit="км"
+            title="Выбор машин для графика пробега"
           />
 
           <div className={styles['dashboard__charts-container']}>
-            {selectedCars.length > 0 ? (
-              <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--time']}`}>
-                <div className={`${styles['dashboard__select-button-container']}`}>
-                  <Button onClick={handleOpenModal} className={styles['dashboard__select-button']}>
-                    Выбрать машины ({selectedCars.length})
-                  </Button>
-                </div>
-
-                <VehicleTimeChart data={filteredChartData} />
+            {/* График времени */}
+            <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--time']}`}>
+              <div className={`${styles['dashboard__select-button-container']}`}>
+                <Button
+                  onClick={() => {
+                    setTempSelectedCars(selectedTimeCars);
+                    setOpenTimeModal(true);
+                  }}
+                  className={styles['dashboard__select-button']}
+                >
+                  Выбрать машины ({selectedTimeCars.length})
+                </Button>
               </div>
-            ) : (
-              <p>Выберите хотя бы одну машину для отображения на графике</p>
-            )}
+              <VehicleTimeChart data={filteredTimeData} />
+            </div>
+
+            {/* График пробега */}
+            <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--mileage']}`}>
+              <div className={`${styles['dashboard__select-button-container']}`}>
+                <Button
+                  onClick={() => {
+                    setTempSelectedCars(selectedMileageCars);
+                    setOpenMileageModal(true);
+                  }}
+                  className={styles['dashboard__select-button']}
+                >
+                  Выбрать машины ({selectedMileageCars.length})
+                </Button>
+              </div>
+              <VehicleMileageChart data={filteredMileageData} />
+            </div>
+
             <div className={`${styles['dashboard__chart']} ${styles['dashboard__chart--douhnut']}`}>
+              <ul className={`${styles['dashboard__chart-list']}`}>
+                <li className={`${styles['dashboard__chart-item']}`}>
+                  <span className={`${styles['dashboard__chart-span']}`}>Кол-во ТС:</span>
+                  <span className={`${styles['dashboard__chart-span-val']}`}>1000</span>
+                </li>
+                <li className={`${styles['dashboard__chart-item']} ${styles['dashboard__chart-item--kpd']}`}>
+                  <span className={`${styles['dashboard__chart-span']}`}>КПД:</span>
+                  <span className={`${styles['dashboard__chart-span-val']}`}>50%</span>
+                </li>
+                <li className={`${styles['dashboard__chart-item']} ${styles['dashboard__chart-item--kip']}`}>
+                  <span className={`${styles['dashboard__chart-span']}`}>КИП:</span>
+                  <span className={`${styles['dashboard__chart-span-val']}`}>51.8%</span>
+                </li>
+              </ul>
               <VehicleUsageDoughnut data={reportData} />
             </div>
-            <div className={styles['dashboard__chart']}>
+            <div className={`${styles['dashboard__chart']} dashboard__chart--activity`}>
               <VehicleActivityChart data={reportData} />
             </div>
           </div>

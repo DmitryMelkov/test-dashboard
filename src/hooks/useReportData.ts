@@ -18,7 +18,7 @@ export const useReportData = () => {
     if (!accessToken) return;
 
     try {
-      // Имитация задержки загрузки (2 секунды)
+      // Имитация задержки загрузки (1 секунда)
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
       const url = new URL('http://localhost:8000/api/report');
@@ -47,7 +47,7 @@ export const useReportData = () => {
     }
   }, [accessToken]);
 
-  
+
 
   return { reportData, sortedReportData, fetchReport };
 };
