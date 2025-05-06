@@ -10,6 +10,7 @@ import { useReportData } from '../../hooks/useReportData';
 import Loader from '../../ui/loader/Loader';
 import ReportTable from '../../components/ReportTable/ReportTable';
 import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
+import useVehicleStats from '../../hooks/useVehicleStats';
 
 const Efficiency = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -17,6 +18,10 @@ const Efficiency = () => {
   const [tempSelectedCars, setTempSelectedCars] = useState<string[]>([]);
   const [openModal, setOpenModal] = useState(false);
   const { reportData, sortedReportData } = useReportData();
+  const { vehicleStats, loading: statsLoading, error: statsError } = useVehicleStats();
+
+  console.log(vehicleStats);
+  
 
   // Фильтруем данные по выбранным машинам (только для графика)
   const filteredChartData = useMemo(() => {
@@ -104,10 +109,14 @@ const Efficiency = () => {
             </div>
           </div>
 
-          <h2 className={styles['efficiency__subtitle']}>Полный отчет по всем машинам</h2>
-          <div className={styles['efficiency__table-container']}>
-            <ReportTable data={reportData} />
-          </div>
+          {!statsLoading && !statsError && (
+            <>
+              <h2 className={styles['efficiency__subtitle']}>Подробная статистика по технике</h2>
+              <div className={styles['efficiency__table-container']}>
+                <ReportTable data={vehicleStats} />
+              </div>
+            </>
+          )}
         </>
       ) : (
         <Loader />

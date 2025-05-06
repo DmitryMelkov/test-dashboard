@@ -1,0 +1,31 @@
+export interface VehicleStats {
+  vehicle_id: number;
+  vehicle_name: string;
+  vehicle_group: string;
+  vehicle_type: string;
+  vehicle_age?: number | null;
+  shift_days?: number | null;
+  idle_shift_days?: number | null;
+  mileage_km?: number | null;
+  motohours?: number | null;
+  daily_mileage?: number | null;
+  daily_motohours?: number | null;
+  working_hours?: number | null;
+  moving_hours?: number | null;
+  efficiency_transport_hours?: number | null;
+  efficiency_special_hours?: number | null;
+  engine_on_idle_hours?: number | null;
+  engine_off_idle_hours?: number | null;
+  non_shift_hours?: number | null;
+  additional_equipment_hours?: number | null;
+  moving_percent?: number | null;
+  efficiency_percent?: number | null;
+  engine_on_idle_percent?: number | null;
+  idle_in_shift_percent?: number | null;
+  non_shift_percent?: number | null;
+  additional_equipment_percent?: number | null;
+  mileage_per_motohour?: number | null;
+  engine_idle_rpm_hours?: number | null;
+  engine_load_rpm_hours?: number | null;
+  engine_idle_rpm_percent?: number | null;
+}

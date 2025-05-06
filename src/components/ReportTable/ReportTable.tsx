@@ -1,14 +1,46 @@
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
-import { CarReport } from '../../types/CarReport';
 import styles from './ReportTable.module.scss';
+import { VehicleStats } from '../../types/VehicleStats';
 
 interface ReportTableProps {
-  data: CarReport[];
+  data: VehicleStats[];
 }
 
 const ReportTable = ({ data }: ReportTableProps) => {
   const theme = useSelector((state: RootState) => state.theme.mode);
+
+  const columns = [
+    { key: 'vehicle_id', header: '№' },
+    { key: 'vehicle_name', header: 'Объект' },
+    { key: 'vehicle_group', header: 'Группа объекта' },
+    { key: 'vehicle_type', header: 'Вид объекта' },
+    { key: 'vehicle_age', header: 'Возраст объекта' },
+    { key: 'shift_days', header: 'Кол-во смен, дней' },
+    { key: 'idle_shift_days', header: 'Кол-во смен простоя, дней' },
+    { key: 'mileage_km', header: 'Пробег, км' },
+    { key: 'motohours', header: 'Время работы ДВС, м/час' },
+    { key: 'daily_mileage', header: 'Коэф использования: Средний пробег в день, км' },
+    { key: 'daily_motohours', header: 'Коэф использования: Средние м/ч в день' },
+    { key: 'working_hours', header: 'Время работы в период смен, ч' },
+    { key: 'moving_hours', header: 'Время движения, ч' },
+    { key: 'efficiency_transport_hours', header: 'КПД транс, ч' },
+    { key: 'efficiency_special_hours', header: 'КПД Спец, Ч' },
+    { key: 'engine_on_idle_hours', header: 'Простой на ХХ, ч' },
+    { key: 'engine_off_idle_hours', header: 'Простой с выкл ДВС, ч' },
+    { key: 'non_shift_hours', header: 'Время вне смен, ч' },
+    { key: 'additional_equipment_hours', header: 'Время ДО, ч' },
+    { key: 'moving_percent', header: 'Движение в %' },
+    { key: 'efficiency_percent', header: 'КПД, %' },
+    { key: 'engine_on_idle_percent', header: 'Простой на ХХ, %' },
+    { key: 'idle_in_shift_percent', header: 'Простой в смену, %' },
+    { key: 'non_shift_percent', header: 'Время вне смен, %' },
+    { key: 'additional_equipment_percent', header: 'Время ДО, %' },
+    { key: 'mileage_per_motohour', header: 'Пробег/часы' },
+    { key: 'engine_idle_rpm_hours', header: 'ХХ, ч' },
+    { key: 'engine_load_rpm_hours', header: 'Время на норм оборотах, ч' },
+    { key: 'engine_idle_rpm_percent', header: 'ХХ, %' },
+  ];
 
   return (
     <div className={`${styles['report-table']} ${theme === 'dark' ? styles['report-table--dark'] : ''}`}>
@@ -16,27 +48,24 @@ const ReportTable = ({ data }: ReportTableProps) => {
         <table className={styles['report-table__table']}>
           <thead className={styles['report-table__header']}>
             <tr>
-              <th className={styles['report-table__cell']}>Машина</th>
-              <th className={styles['report-table__cell']}>Дата</th>
-              <th className={styles['report-table__cell']}>Моточасы</th>
-              <th className={styles['report-table__cell']}>Пробег (км)</th>
-              <th className={styles['report-table__cell']}>Расход топлива (л)</th>
-              <th className={styles['report-table__cell']}>Время простоя (ч)</th>
-              <th className={styles['report-table__cell']}>Заправлено (л)</th>
+              {columns.map((column) => (
+                <th key={column.key} className={styles['report-table__cell']}>
+                  {column.header}
+                </th>
+              ))}
             </tr>
           </thead>
           <tbody className={styles['report-table__body']}>
-            {data.map((car) => (
-              <tr key={`${car.car_name}-${car.car_data.date}`} className={styles['report-table__row']}>
-                <td className={styles['report-table__cell']}>{car.car_name}</td>
-                <td className={`${styles['report-table__cell']} ${styles['report-table__cell--date']}`}>
-                  {car.car_data.date}
-                </td>
-                <td className={styles['report-table__cell']}>{car.car_data.motohours.toFixed(2)}</td>
-                <td className={styles['report-table__cell']}>{car.car_data.millage.toFixed(2)}</td>
-                <td className={styles['report-table__cell']}>{car.car_data.consumption_total.toFixed(2)}</td>
-                <td className={styles['report-table__cell']}>{car.car_data.idle_time.toFixed(2)}</td>
-                <td className={styles['report-table__cell']}>{car.car_data.filled_real.toFixed(2)}</td>
+            {data.map((vehicle) => (
+              <tr key={vehicle.vehicle_id} className={styles['report-table__row']}>
+                {columns.map((column) => {
+                  const value = vehicle[column.key as keyof VehicleStats];
+                  return (
+                    <td key={`${vehicle.vehicle_id}-${column.key}`} className={styles['report-table__cell']}>
+                      {value === null || value === undefined ? '-' : value}
+                    </td>
+                  );
+                })}
               </tr>
             ))}
           </tbody>
