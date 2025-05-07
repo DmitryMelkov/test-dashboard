@@ -1,8 +1,8 @@
-// routes.tsx
 import { createBrowserRouter } from 'react-router-dom';
 import Layout from '../components/Layout/Layout';
 import Dashboard from '../pages/Dashboard/Dashboard';
 import Efficiency from '../pages/Efficiency/Efficiency';
+import FuelNorms from '../pages/FuelNorms/FuelNorms';
 import ProtectedRoute from '../components/ProtectedRoute/ProtectedRoute';
 
 export const router = createBrowserRouter([
@@ -24,6 +24,10 @@ export const router = createBrowserRouter([
           {
             path: 'efficiency',
             element: <Efficiency />,
+          },
+          {
+            path: 'fuel-norms',
+            element: <FuelNorms />,
           },
           {
             path: '*',
