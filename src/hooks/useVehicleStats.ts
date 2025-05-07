@@ -14,8 +14,6 @@ const useVehicleStats = () => {
           throw new Error('Ошибка загрузки данных');
         }
         const data = await response.json();
-        console.log(data);
-
         setVehicleStats(data);
       } catch (err) {
         setError(err instanceof Error ? err.message : 'Неизвестная ошибка');

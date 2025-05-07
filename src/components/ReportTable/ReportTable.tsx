@@ -11,7 +11,7 @@ const ReportTable = ({ data }: ReportTableProps) => {
   const theme = useSelector((state: RootState) => state.theme.mode);
 
   const columns = [
-    { key: 'vehicle_id', header: '№' },
+    // { key: 'vehicle_id', header: '№' },
     { key: 'vehicle_name', header: 'Объект' },
     { key: 'vehicle_group', header: 'Группа объекта' },
     { key: 'vehicle_type', header: 'Вид объекта' },

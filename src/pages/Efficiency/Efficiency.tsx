@@ -20,9 +20,6 @@ const Efficiency = () => {
   const { reportData, sortedReportData } = useReportData();
   const { vehicleStats, loading: statsLoading, error: statsError } = useVehicleStats();
 
-  console.log(vehicleStats);
-  
-
   // Фильтруем данные по выбранным машинам (только для графика)
   const filteredChartData = useMemo(() => {
     if (!reportData) return [];

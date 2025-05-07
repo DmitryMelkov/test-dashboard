@@ -4,6 +4,7 @@
 .sidebar {
   width: 250px;
   display: flex;
+  flex-shrink: 0;
   flex-direction: column;
   transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
 

@@ -13,6 +13,7 @@ const Layout = () => {
     <div className={`${styles['layout']} ${styles[`layout--${theme}`]}`}>
       <Header theme={theme} />
       <div className={`${styles['content']}`}>
+        
         <Sidebar theme={theme} />
         <main className={styles['main']}>
           <Outlet />
