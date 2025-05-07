@@ -15,14 +15,14 @@ const Sidebar = ({ theme }: SidebarProps) => {
   // Определяем активные пути
   const isDashboardActive = location.pathname === '/dashboard';
   const isEfficiencyActive = location.pathname === '/efficiency';
-  const isFuelNormsActive = location.pathname === '/fuel-norms';
+  const isFuelNormsActive = location.pathname === '/financial-dashboard';
 
   // Автоматически открывать подменю если активен один из его пунктов
   useEffect(() => {
     if (isDashboardActive || isEfficiencyActive) {
       setOpenMenu('kpd');
     } else if (isFuelNormsActive) {
-      setOpenMenu('fuel');
+      setOpenMenu('financial');
     }
   }, [isDashboardActive, isEfficiencyActive, isFuelNormsActive]);
 
@@ -78,11 +78,11 @@ const Sidebar = ({ theme }: SidebarProps) => {
             <div className={styles['sidebar__item']}>
               <button
                 className={styles['sidebar__item-btn']}
-                onClick={() => toggleMenu('fuel')}
+                onClick={() => toggleMenu('financial')}
               >
                 <FaGasPump className={styles['sidebar__icon']} />
-                <span className={styles['sidebar__nav-text']}>Топливная аналитика</span>
-                {openMenu === 'fuel' ? (
+                <span className={styles['sidebar__nav-text']}>Финансовая аналитика</span>
+                {openMenu === 'financial' ? (
                   <FaChevronLeft className={styles['sidebar__arrow']} />
                 ) : (
                   <FaChevronDown className={styles['sidebar__arrow']} />
@@ -90,14 +90,14 @@ const Sidebar = ({ theme }: SidebarProps) => {
               </button>
             </div>
 
-            {openMenu === 'fuel' && (
+            {openMenu === 'financial' && (
               <ul className={styles['sidebar__submenu']}>
                 <li className={styles['sidebar__submenu-item']}>
                   <Link
-                    to="/fuel-norms"
+                    to="/financial-dashboard"
                     className={`${styles['sidebar__submenu-link']} ${isFuelNormsActive ? styles['sidebar__submenu-link--active'] : ''}`}
                   >
-                    Нормы топлива
+                    Дашборд
                   </Link>
                 </li>
               </ul>

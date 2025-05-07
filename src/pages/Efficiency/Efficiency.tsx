@@ -11,6 +11,7 @@ import Loader from '../../ui/loader/Loader';
 import ReportTable from '../../components/ReportTable/ReportTable';
 import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
 import useVehicleStats from '../../hooks/useVehicleStats';
+import TableModal from '../../components/ReportTable/TableModal/TableModal';
 
 const Efficiency = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -19,6 +20,8 @@ const Efficiency = () => {
   const [openModal, setOpenModal] = useState(false);
   const { reportData, sortedReportData } = useReportData();
   const { vehicleStats, loading: statsLoading, error: statsError } = useVehicleStats();
+  // В компоненте Efficiency добавим состояние для модального окна
+  const [openTableModal, setOpenTableModal] = useState(false);
 
   // Фильтруем данные по выбранным машинам (только для графика)
   const filteredChartData = useMemo(() => {
@@ -68,24 +71,31 @@ const Efficiency = () => {
     <div className={`${styles['efficiency']} ${styles[`efficiency--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'КПД' }, { label: 'Эффективность работы' }]} theme={theme} />
 
+      <TableModal
+        open={openTableModal}
+        onClose={() => setOpenTableModal(false)}
+        data={vehicleStats}
+        title="Подробная статистика по технике"
+      />
+
+      <CarSelectionModal
+        open={openModal}
+        onClose={handleCloseModal}
+        onApply={handleApplySelection}
+        reportData={sortedReportData}
+        selectedCars={tempSelectedCars}
+        onToggleCar={handleCarToggle}
+        onSelectAll={handleSelectAll}
+        sortKey="idle_time"
+        unit="ч"
+        title="Выбор машин для графика времени"
+      />
+
       {reportData ? (
         <>
           <div className={styles['efficiency__header']}>
             <h2 className={styles['efficiency__title']}>Графики</h2>
           </div>
-
-          <CarSelectionModal
-            open={openModal}
-            onClose={handleCloseModal}
-            onApply={handleApplySelection}
-            reportData={sortedReportData}
-            selectedCars={tempSelectedCars}
-            onToggleCar={handleCarToggle}
-            onSelectAll={handleSelectAll}
-            sortKey="idle_time"
-            unit="ч"
-            title="Выбор машин для графика времени"
-          />
 
           <div className={styles['efficiency__charts-container']}>
             {selectedCars.length > 0 ? (
@@ -108,7 +118,10 @@ const Efficiency = () => {
 
           {!statsLoading && !statsError && (
             <>
-              <h2 className={styles['efficiency__subtitle']}>Подробная статистика по технике</h2>
+              <div className={`${styles['efficiency__header']}`}>
+                <h2 className={styles['efficiency__subtitle']}>Подробная статистика по технике</h2>
+                <Button onClick={() => setOpenTableModal(true)}>Открыть в модальном окне</Button>
+              </div>
               <div className={styles['efficiency__table-container']}>
                 <ReportTable data={vehicleStats} />
               </div>

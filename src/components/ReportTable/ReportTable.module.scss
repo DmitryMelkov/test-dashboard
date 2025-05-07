@@ -21,7 +21,7 @@
     border-collapse: separate;
     border-spacing: 0;
     font-size: 13px;
-    min-width: max-content; // Для горизонтального скролла
+    min-width: max-content;
   }
 
   &__header {
@@ -47,10 +47,7 @@
     padding: 8px 12px;
     border-bottom: 1px solid vars.$silver-city;
     border-right: 1px solid vars.$silver-city;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    // max-width: 200px;
+    max-width: 200px;
 
     &:first-child {
       border-left: 1px solid vars.$silver-city;
@@ -71,9 +68,6 @@
     position: sticky;
     top: 0;
     padding: 10px 12px;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
 
     &:first-child {
       left: 0;
