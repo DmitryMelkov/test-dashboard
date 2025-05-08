@@ -23,7 +23,7 @@ type UsageDoughnutProps = {
   hideTooltip?: boolean;
 };
 
-// Стандартные цвета для диаграммы (примерно 10 штук)
+// Стандартные цвета для диаграммы
 const defaultColors = [
   '#36A2EB', // blue
   '#FF5733', // red/orange
@@ -55,10 +55,10 @@ const UsageDoughnut: React.FC<UsageDoughnutProps> = ({
   // Форматирование больших чисел для подписей
   const formatNumber = (value: number): string => {
     if (value >= 1000000) {
-      return `${(value / 1000000).toFixed(1)}M`;
+      return `${(value / 1000000).toFixed(1)}млн `;
     }
     if (value >= 1000) {
-      return `${(value / 1000).toFixed(1)}K`;
+      return `${(value / 1000).toFixed(1)}тыс `;
     }
     return value.toFixed(1);
   };

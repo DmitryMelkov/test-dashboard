@@ -2,8 +2,6 @@
 @use '../../styles/variables' as vars;
 @use '../../styles/mixins' as mixins;
 
-
-
 .financial-dashboard {
   display: flex;
   flex-direction: column;
@@ -24,13 +22,35 @@
     color: #333333;
   }
 
+  &__chart-container {
+    margin-top: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    canvas {
+      max-height: 100%;
+      width: auto !important;
+    }
+  }
+
+  // &__tab-btn {
+  //   font-size: 14px !important;
+  //   line-height: 14px !important;
+  //   color: vars.$carbon !important;
+  // }
+
   &__chart {
     display: flex;
     flex-direction: column;
+    width: 350px;
     height: 350px;
     flex-shrink: 0;
     position: relative;
     grid-column: span 6;
+    background-color: inherit;
+    border-radius: 10px;
+    box-sizing: border-box;
 
     &--light {
       background-color: vars.$white;
@@ -42,6 +62,4 @@
       box-shadow: 0 2px 8px rgba(vars.$black, 0.3);
     }
   }
-
-
 }

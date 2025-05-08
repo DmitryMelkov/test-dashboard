@@ -6,6 +6,8 @@ import UsageDoughnut from '../../components/UsageDoughnut/UsageDoughnut';
 import useFinancialStats from '../../hooks/useFinancialStats';
 import Loader from '../../ui/loader/Loader';
 import { FinancialStat } from '../../types/financialStats';
+import { Box, Tab, Tabs } from '@mui/material';
+import { useState } from 'react';
 
 type LossesDataItem = {
   label: string;
@@ -15,19 +17,17 @@ type LossesDataItem = {
 const FinancialDashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
   const { data, loading, error } = useFinancialStats();
+  const [activeTab, setActiveTab] = useState(0);
 
   if (loading) return <Loader />;
   if (error) return <div>Error: {error}</div>;
 
   // Универсальная функция для подсчёта потерь по указанным ключам
-  const calculateLosses = (
-    keys: { label: string; field: keyof FinancialStat }[]
-  ): LossesDataItem[] => {
+  const calculateLosses = (keys: { label: string; field: keyof FinancialStat }[]): LossesDataItem[] => {
     return keys.map(({ label, field }) => {
       const total = data.reduce((sum, item) => {
         const value = item[field];
-        const numValue =
-          typeof value === 'number' ? value : parseFloat(value as string);
+        const numValue = typeof value === 'number' ? value : parseFloat(value as string);
         return Number.isNaN(numValue) ? sum : sum + numValue;
       }, 0);
 
@@ -48,22 +48,47 @@ const FinancialDashboard = () => {
     { label: 'Простой на холостом ходу', field: 'idle_running_cost' as const },
   ];
 
+  const lossesConfig3 = [
+    { label: 'Расход на ЗП за период', field: 'salary_expenses' as const },
+    { label: 'Расход на топливо', field: 'fuel_expenses' as const },
+    { label: 'Амортизация', field: 'depreciation' as const },
+    { label: 'Запчасти', field: 'spare_parts' as const },
+  ];
+
   const lossesData = calculateLosses(lossesConfig1);
   const lossesData2 = calculateLosses(lossesConfig2);
+  const lossesData3 = calculateLosses(lossesConfig3);
 
   return (
     <div className={`${styles['financial-dashboard']} ${styles[`financial-dashboard--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'Финансовая аналитика' }, { label: 'Дашборд' }]} theme={theme} />
-      <h1>Финансовая аналитика</h1>
+      <Box>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={activeTab} onChange={(_e, newValue) => setActiveTab(newValue)}>
+            <Tab className={`${styles['financial-dashboard__tab-btn']}`} label="Распределение потерь" />
+            <Tab label="Потери по типам" />
+            <Tab label="Расходы" />
+          </Tabs>
+        </Box>
 
-      <div className={styles['financial-dashboard__chart-container']}>
-        <div className={styles['financial-dashboard__chart']}>
-          <UsageDoughnut data={lossesData} title="Распределение потерь" unit="р" legendPosition="bottom" cutout="70%" />
+        <div className={styles['financial-dashboard__chart-container']}>
+          {activeTab === 0 && (
+            <div className={styles['financial-dashboard__chart']}>
+              <UsageDoughnut data={lossesData} unit="Р" legendPosition="bottom" cutout="70%" />
+            </div>
+          )}
+          {activeTab === 1 && (
+            <div className={styles['financial-dashboard__chart']}>
+              <UsageDoughnut data={lossesData2} unit="Р" legendPosition="bottom" cutout="70%" />
+            </div>
+          )}
+          {activeTab === 2 && (
+            <div className={styles['financial-dashboard__chart']}>
+              <UsageDoughnut data={lossesData3} unit="Р" legendPosition="bottom" cutout="70%" />
+            </div>
+          )}
         </div>
-        <div className={styles['financial-dashboard__chart']}>
-          <UsageDoughnut data={lossesData2} title="Потери по типам" unit="р" legendPosition="bottom" cutout="70%" />
-        </div>
-      </div>
+      </Box>
     </div>
   );
 };
