@@ -62,12 +62,31 @@ const FinancialDashboard = () => {
   return (
     <div className={`${styles['financial-dashboard']} ${styles[`financial-dashboard--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'Финансовая аналитика' }, { label: 'Дашборд' }]} theme={theme} />
-      <Box>
+      <Box
+        className={`${styles['financial-dashboard__tabs-container']} ${styles[`financial-dashboard__tabs-container--${theme}`]}`}
+      >
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs value={activeTab} onChange={(_e, newValue) => setActiveTab(newValue)}>
+          <Tabs
+            value={activeTab}
+            onChange={(_e, newValue) => setActiveTab(newValue)}
+            aria-label="basic tabs example"
+            TabIndicatorProps={{
+              style: {
+                backgroundColor: theme === 'dark' ? '#ffffff' : '#1890ff',
+              },
+            }}
+            sx={{
+              '& .MuiTab-root': {
+                color: theme === 'dark' ? '#cccccc' : '#333',
+              },
+              '& .MuiTab-root.Mui-selected': {
+                color: theme === 'dark' ? '#ffffff' : '#1890ff',
+              },
+            }}
+          >
             <Tab className={`${styles['financial-dashboard__tab-btn']}`} label="Распределение потерь" />
-            <Tab label="Потери по типам" />
-            <Tab label="Расходы" />
+            <Tab className={`${styles['financial-dashboard__tab-btn']}`} label="Потери по типам" />
+            <Tab className={`${styles['financial-dashboard__tab-btn']}`} label="Расходы" />
           </Tabs>
         </Box>
 
