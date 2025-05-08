@@ -1,0 +1,29 @@
+export interface FinancialStat {
+  vehicle_id: number;
+  vehicle_name: string;
+  vehicle_group: string;
+  vehicle_type: string;
+  salary_expenses: number | null;
+  fuel_expenses: number | null;
+  depreciation: number | null;
+  spare_parts: number | null;
+  total_ownership_cost: number | null;
+  cost_per_shift: number | null;
+  shift_price: number | null;
+  profit_per_shift: number | null;
+  profit_per_hour: number | null;
+  cost_per_hour: number | null;
+  cost_per_km: number | null;
+  cost_per_mh: number | null;
+  deviation_from_norm: number | null;
+  fuel_drainage_loss: number | null;
+  underfilling_loss: number | null;
+  idle_running_cost: number | null;
+  total_losses: number | null;
+  downtime_losses: number | null;
+  repair_downtime_losses: number | null;
+  off_shift_time_losses: number | null;
+  total_missed_profit: number | null;
+  planned_profit: number | null;
+  potential_profit: number | null;
+}

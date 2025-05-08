@@ -1,0 +1,47 @@
+@use 'sass:color';
+@use '../../styles/variables' as vars;
+@use '../../styles/mixins' as mixins;
+
+
+
+.financial-dashboard {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 7rem);
+  padding: 2rem;
+  background-color: inherit;
+  color: inherit;
+  transition: color 0.3s ease-in-out, background-color 0.3s ease-in-out;
+  overflow: hidden;
+
+  &--dark {
+    background-color: #1e1e1e;
+    color: #ffffff;
+  }
+
+  &--light {
+    background-color: #ffffff;
+    color: #333333;
+  }
+
+  &__chart {
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    flex-shrink: 0;
+    position: relative;
+    grid-column: span 6;
+
+    &--light {
+      background-color: vars.$white;
+      box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+    }
+
+    &--dark {
+      background-color: rgba(vars.$white, 0.05);
+      box-shadow: 0 2px 8px rgba(vars.$black, 0.3);
+    }
+  }
+
+
+}

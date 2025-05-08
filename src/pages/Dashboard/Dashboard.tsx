@@ -2,7 +2,6 @@ import { RootState } from '../../store';
 import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import { useSelector } from 'react-redux';
 import styles from './Dashboard.module.scss';
-import VehicleUsageDoughnut from '../../components/VehicleUsageDoughnut/VehicleUsageDoughnut';
 import Loader from '../../ui/loader/Loader';
 import { useReportData } from '../../hooks/useReportData';
 import Button from '../../ui/Button/Button';
@@ -11,6 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
 import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
 import VehicleMileageChart from '../../components/VehicleMileageChart/VehicleMileageChart';
+import UsageDoughnut from '../../components/UsageDoughnut/UsageDoughnut';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
@@ -170,7 +170,15 @@ const Dashboard = () => {
                   <span className={`${styles['dashboard__chart-span-val']}`}>51.8%</span>
                 </li>
               </ul>
-              <VehicleUsageDoughnut data={reportData} />
+              <UsageDoughnut
+                data={[
+                  { label: 'Моточасы', value: 70 },
+                  { label: 'Простой', value: 50 },
+                ]}
+                title="Использование ТС"
+                unit="ч"
+                legendPosition="bottom"
+              />
             </div>
             <div className={`${styles['dashboard__chart']} dashboard__chart--activity`}>
               <VehicleActivityChart data={reportData} />
