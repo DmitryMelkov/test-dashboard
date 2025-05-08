@@ -3,6 +3,7 @@ export interface FinancialStat {
   vehicle_name: string;
   vehicle_group: string;
   vehicle_type: string;
+  date: string;
   salary_expenses: number | null;
   fuel_expenses: number | null;
   depreciation: number | null;
