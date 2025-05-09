@@ -57,9 +57,7 @@ const groupDataByDate = (data: FinancialStat[]): GroupedFinancialData[] => {
     grouped[date].idle_running_cost += Number(item.idle_running_cost) || 0;
   });
 
-  return Object.values(grouped).sort(
-    (a, b) => new Date(a.date).getTime() - new Date(b.date).getTime()
-  );
+  return Object.values(grouped).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 };
 
 const FinancialDashboard = () => {
@@ -114,63 +112,61 @@ const FinancialDashboard = () => {
     <div className={`${styles['financial-dashboard']} ${styles[`financial-dashboard--${theme}`]}`}>
       <Breadcrumbs segments={[{ label: 'Финансовая аналитика' }, { label: 'Дашборд' }]} theme={theme} />
 
-      <Box className={styles['financial-dashboard__tabs-container']}>
-        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-          <Tabs
-            value={activeTab}
-            onChange={(_e, newValue) => setActiveTab(newValue)}
-            aria-label="basic tabs example"
-            TabIndicatorProps={{
-              style: {
-                backgroundColor: theme === 'dark' ? '#ffffff' : '#1890ff',
-              },
-            }}
-            sx={{
-              '& .MuiTab-root': {
-                color: theme === 'dark' ? '#cccccc' : '#333',
-              },
-              '& .MuiTab-root.Mui-selected': {
-                color: theme === 'dark' ? '#ffffff' : '#1890ff',
-              },
-            }}
-          >
-            <Tab className={styles['financial-dashboard__tab-btn']} label="Распределение потерь" />
-            <Tab className={styles['financial-dashboard__tab-btn']} label="Потери по типам" />
-            <Tab className={styles['financial-dashboard__tab-btn']} label="Расходы" />
-            <Tab className={styles['financial-dashboard__tab-btn']} label="Гистограмма потерь" />
-          </Tabs>
-        </Box>
+      <div className={`${styles['financial-dashboard__chart-container']}`}>
+        <Box className={styles['financial-dashboard__tabs-container']}>
+          <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Tabs
+              value={activeTab}
+              onChange={(_e, newValue) => setActiveTab(newValue)}
+              aria-label="basic tabs example"
+              TabIndicatorProps={{
+                style: {
+                  backgroundColor: theme === 'dark' ? '#ffffff' : '#1890ff',
+                },
+              }}
+              sx={{
+                '& .MuiTab-root': {
+                  color: theme === 'dark' ? '#cccccc' : '#333',
+                },
+                '& .MuiTab-root.Mui-selected': {
+                  color: theme === 'dark' ? '#ffffff' : '#1890ff',
+                },
+              }}
+            >
+              <Tab className={styles['financial-dashboard__tab-btn']} label="Распределение потерь" />
+              <Tab className={styles['financial-dashboard__tab-btn']} label="Потери по типам" />
+              <Tab className={styles['financial-dashboard__tab-btn']} label="Расходы" />
+            </Tabs>
+          </Box>
 
-        <div className={styles['financial-dashboard__chart-container']}>
-          {activeTab === 0 && (
-            <div className={styles['financial-dashboard__chart']}>
-              <UsageDoughnut data={lossesData} unit="Р" legendPosition="bottom" cutout="70%" />
-            </div>
-          )}
-          {activeTab === 1 && (
-            <div className={styles['financial-dashboard__chart']}>
-              <UsageDoughnut data={lossesData2} unit="Р" legendPosition="bottom" cutout="70%" />
-            </div>
-          )}
-          {activeTab === 2 && (
-            <div className={styles['financial-dashboard__chart']}>
-              <UsageDoughnut data={lossesData3} unit="Р" legendPosition="bottom" cutout="70%" />
-            </div>
-          )}
-          {activeTab === 3 && (
-            <div className={styles['financial-dashboard__chart']}>
-              <BarChart<GroupedFinancialData>
-                data={groupedData}
-                datasets={datasets}
-                title="Суммарные потери по дням"
-                unit="Р"
-                theme={theme}
-                labelField="date"
-              />
-            </div>
-          )}
+          <div className={styles['financial-dashboard__charts-doughnut']}>
+            {activeTab === 0 && (
+              <div className={styles['financial-dashboard__chart-doughnut']}>
+                <UsageDoughnut data={lossesData} unit="Р" legendPosition="bottom" cutout="70%" />
+              </div>
+            )}
+            {activeTab === 1 && (
+              <div className={styles['financial-dashboard__chart-doughnut']}>
+                <UsageDoughnut data={lossesData2} unit="Р" legendPosition="bottom" cutout="70%" />
+              </div>
+            )}
+            {activeTab === 2 && (
+              <div className={styles['financial-dashboard__chart-doughnut']}>
+                <UsageDoughnut data={lossesData3} unit="Р" legendPosition="bottom" cutout="70%" />
+              </div>
+            )}
+          </div>
+        </Box>
+        <div className={styles['financial-dashboard__chart-bar']}>
+          <BarChart<GroupedFinancialData>
+            data={groupedData}
+            datasets={datasets}
+            title="Суммарные потери по дням"
+            unit="Р"
+            legendPosition="bottom"
+          />
         </div>
-      </Box>
+      </div>
     </div>
   );
 };

@@ -22,7 +22,23 @@
     color: #333333;
   }
 
+  &__tab-btn {
+    font-size: 14px !important;
+    line-height: 14px !important;
+  }
+
   &__chart-container {
+    max-width: 1200px;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 30px;
+  }
+
+  &__tabs-container {
+    grid-column: span 6;
+  }
+
+  &__chart-doughnut {
     margin-top: 30px;
     display: flex;
     align-items: center;
@@ -34,15 +50,10 @@
     }
   }
 
-  &__tab-btn {
-    font-size: 14px !important;
-    line-height: 14px !important;
-  }
-
-  &__chart {
+  &__chart-doughnut{
     display: flex;
     flex-direction: column;
-    width: 350px;
+    // width: 350px;
     height: 350px;
     flex-shrink: 0;
     position: relative;
@@ -60,5 +71,9 @@
       background-color: rgba(vars.$white, 0.05);
       box-shadow: 0 2px 8px rgba(vars.$black, 0.3);
     }
+  }
+
+  &__chart-bar {
+    grid-column: span 6;
   }
 }

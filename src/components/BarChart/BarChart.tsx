@@ -39,6 +39,7 @@ interface BarChartProps<T> {
   unit?: string;
   theme?: 'light' | 'dark';
   labelField?: keyof T;
+  legendPosition?: 'top' | 'bottom' | 'left' | 'right' | 'center';
 }
 
 const BarChart = <T extends Record<string, any>>({
@@ -48,6 +49,7 @@ const BarChart = <T extends Record<string, any>>({
   unit = 'Р',
   theme = 'light',
   labelField = 'date',
+  legendPosition = 'top',
 }: BarChartProps<T>) => {
   if (!data || data.length === 0) {
     return <div>Нет данных для отображения</div>;
@@ -72,7 +74,7 @@ const BarChart = <T extends Record<string, any>>({
     maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: legendPosition,
         labels: {
           color: theme === 'dark' ? '#fff' : '#333',
         },
@@ -119,11 +121,7 @@ const BarChart = <T extends Record<string, any>>({
     },
   };
 
-  return (
-    <div style={{ height: '400px', width: '100%' }}>
-      <Bar data={chartData} options={options} />
-    </div>
-  );
+  return <Bar data={chartData} options={options} />;
 };
 
 export default BarChart;
