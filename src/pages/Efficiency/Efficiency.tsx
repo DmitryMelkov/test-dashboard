@@ -3,13 +3,13 @@ import Breadcrumbs from '../../components/Breadcrumbs/Breadcrumbs';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import styles from './Efficiency.module.scss';
-import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
+import VehicleTimeChart from '../../components/Charts/VehicleTimeChart/VehicleTimeChart';
 import Button from '../../ui/Button/Button';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
 import { useReportData } from '../../hooks/useReportData';
 import Loader from '../../ui/loader/Loader';
 import ReportTable from '../../components/ReportTable/ReportTable';
-import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
+import VehicleActivityChart from '../../components/Charts/VehicleActivityChart/VehicleActivityChart';
 import useVehicleStats from '../../hooks/useVehicleStats';
 import TableModal from '../../components/ReportTable/TableModal/TableModal';
 

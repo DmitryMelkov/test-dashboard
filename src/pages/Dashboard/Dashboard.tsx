@@ -5,12 +5,12 @@ import styles from './Dashboard.module.scss';
 import Loader from '../../ui/loader/Loader';
 import { useReportData } from '../../hooks/useReportData';
 import Button from '../../ui/Button/Button';
-import VehicleTimeChart from '../../components/VehicleTimeChart/VehicleTimeChart';
+import VehicleTimeChart from '../../components/Charts/VehicleTimeChart/VehicleTimeChart';
 import { useEffect, useMemo, useState } from 'react';
 import CarSelectionModal from '../../components/CarSelectionModal/CarSelectionModal';
-import VehicleActivityChart from '../../components/VehicleActivityChart/VehicleActivityChart';
-import VehicleMileageChart from '../../components/VehicleMileageChart/VehicleMileageChart';
-import UsageDoughnut from '../../components/UsageDoughnut/UsageDoughnut';
+import VehicleActivityChart from '../../components/Charts/VehicleActivityChart/VehicleActivityChart';
+import VehicleMileageChart from '../../components/Charts/VehicleMileageChart/VehicleMileageChart';
+import UsageDoughnut from '../../components/Charts/UsageDoughnut/UsageDoughnut';
 
 const Dashboard = () => {
   const theme = useSelector((state: RootState) => state.theme.mode);
